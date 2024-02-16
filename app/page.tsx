@@ -1,10 +1,9 @@
-"use client";
 import TextCard from "@/components/text-card";
 import { supabase } from "@/lib/supabase-client";
 import { Message } from "@/types/collection";
-import { useCallback, useEffect, useState } from "react";
 
-export async function getData() {
+async function getData() {
+  // export 금지
   const { data, error } = await supabase.from("messages").select();
   // console.log(data);
   if (error) {
