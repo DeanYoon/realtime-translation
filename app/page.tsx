@@ -10,15 +10,18 @@ import { useEffect, useState } from "react";
 export interface IMessage {
   id: number;
   input: string;
-  translated: string;
+  translated: string | null;
 }
 
 export default function Home() {
   const messages = useDBStore((state) => state.DBData);
   const refreshDB = useDBStore((state) => state.refreshDB);
+
+  // const [messages, setMessages] = useState<IMessage[]>([]);
+
   useEffect(() => {
-    // fetchData();
     refreshDB();
+    // setMessages(initDB);
   }, []);
   return (
     <div className="flex  flex-col w-screen  h-screen ">

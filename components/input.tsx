@@ -14,10 +14,16 @@ import SpeechRecognition, {
 export function Input() {
   const [text, setText] = useState("");
   const refreshDB = useDBStore((state) => state.refreshDB);
+  const addDataUI = useDBStore((state) => state.addDataUI);
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setText("");
+    addDataUI({
+      input: text,
+      id: 1,
+      translated: null,
+    });
 
     const response = await axios.post(
       "api/translate",
