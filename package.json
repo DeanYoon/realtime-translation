@@ -11,10 +11,16 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.39.6",
+    "@types/react-speech-recognition": "^3.9.5",
+    "axios": "^1.6.7",
     "deepl-node": "^1.11.1",
+    "fs": "^0.0.1-security",
     "next": "14.1.0",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-hook-form": "^7.50.1",
+    "react-speech-recognition": "^3.10.0",
+    "zustand": "^4.5.1"
   },
   "devDependencies": {
     "@types/node": "^20",

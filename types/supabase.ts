@@ -34,7 +34,7 @@ export type Database = {
   }
   public: {
     Tables: {
-      Chennels: {
+      chennels: {
         Row: {
           channel_name: string | null
           created_at: string
@@ -58,12 +58,12 @@ export type Database = {
             foreignKeyName: "public_Chennels_userId_fkey"
             columns: ["userId"]
             isOneToOne: false
-            referencedRelation: "Users"
+            referencedRelation: "users"
             referencedColumns: ["id"]
           }
         ]
       }
-      Message: {
+      messages: {
         Row: {
           channelId: number | null
           created_at: string
@@ -93,19 +93,19 @@ export type Database = {
             foreignKeyName: "public_Message_channelId_fkey"
             columns: ["channelId"]
             isOneToOne: false
-            referencedRelation: "Chennels"
+            referencedRelation: "chennels"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "public_Message_userId_fkey"
             columns: ["userId"]
             isOneToOne: false
-            referencedRelation: "Users"
+            referencedRelation: "users"
             referencedColumns: ["id"]
           }
         ]
       }
-      Users: {
+      users: {
         Row: {
           created_at: string
           email: string | null
