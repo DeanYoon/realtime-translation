@@ -5,25 +5,32 @@ import { supabase } from "@/lib/supabase-client";
 import { Message } from "@/types/collection";
 import axios from "axios";
 // import { translateText } from "@/lib/translate-text";
-import { FormEvent, useState } from "react";
+import { FormEvent, RefObject, useState } from "react";
 
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
 
-export function Input() {
+interface Props {
+  scrollRef: RefObject<HTMLDivElement>;
+  handleScrollToBottom: () => void;
+}
+export function Input(props: Props) {
   const [text, setText] = useState("");
   const refreshDB = useDBStore((state) => state.refreshDB);
   const addDataUI = useDBStore((state) => state.addDataUI);
 
+  const { handleScrollToBottom } = props;
+
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setText("");
-    addDataUI({
+    await addDataUI({
       input: text,
       id: 1,
       translated: null,
     });
+    handleScrollToBottom();
 
     const response = await axios.post(
       "api/translate",
@@ -32,6 +39,7 @@ export function Input() {
         target_lang: "KO",
       })
     );
+
     const translatedData = response?.data[0].text;
 
     const newData = {
@@ -45,13 +53,14 @@ export function Input() {
     if (error) {
       console.error(error.message);
     } else {
-      refreshDB();
+      await refreshDB();
+      handleScrollToBottom();
     }
   };
 
   return (
-    <div>
-      <form onSubmit={onSubmit} className="absolute w-full h-8  bottom-0 ">
+    <div className="fixed bottom-0  w-full ">
+      <form onSubmit={onSubmit} className="  h-8  ">
         <input
           value={text}
           onChange={(e) => setText(e.target.value)}
