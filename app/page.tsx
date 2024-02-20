@@ -29,8 +29,8 @@ export default function Home() {
   }, []);
   return (
     <div className="flex  flex-col w-screen  h-screen">
-      <div className="">
-        <div className=" pb-8 h-full " ref={scrollRef}>
+      <div className="flex items-center justify-center">
+        <div className=" pb-8 h-full  w-1/3   min-w-80" ref={scrollRef}>
           {messages &&
             messages.map((message) => (
               <TextCard key={message.id} message={message} />
