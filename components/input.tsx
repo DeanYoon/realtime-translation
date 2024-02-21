@@ -20,8 +20,11 @@ interface Props {
 }
 
 export function Input(props: Props) {
+  const currentChannelId = useDBStore((state) => state.channel);
+  const userId = useDBStore((state) => state.user);
+
   const [text, setText] = useState("");
-  const refreshDB = useDBStore((state) => state.refreshDB);
+  const fetchMessages = useDBStore((state) => state.fetchMessages);
   const addDataUI = useDBStore((state) => state.addDataUI);
   const [isMicOn, setIsMicOn] = useState(false);
   const { handleScrollToBottom } = props;
@@ -53,8 +56,8 @@ export function Input(props: Props) {
 
     const newData = {
       input: text,
-      userId: 1,
-      channelId: 1,
+      userId: userId,
+      channelId: currentChannelId,
       translated: translatedData,
     };
     const { error } = await supabase.from("messages").insert([newData]); //array 형태로 집어넣어야함
@@ -62,7 +65,7 @@ export function Input(props: Props) {
     if (error) {
       console.error(error.message);
     } else {
-      await refreshDB();
+      await fetchMessages(currentChannelId, userId);
       handleScrollToBottom();
     }
   };
@@ -87,9 +90,9 @@ export function Input(props: Props) {
     setIsMicOn(true);
     mic.start();
 
-    mic.onspeechstart = () => {
-      console.log("Speech has been detected");
-    };
+    // mic.onspeechstart = () => {
+    //   console.log("Speech has been detected");
+    // };
 
     // mic.onresult = (event) => {
     //   const color = event.results[0][0];
@@ -97,29 +100,28 @@ export function Input(props: Props) {
     // };
 
     mic.onspeechend = async () => {
-      console.log("ended");
       setIsMicOn(false);
     };
   };
 
   const onMicClick = () => {
-    setIsMicOn((prev) => !prev);
+    onMic();
   };
 
   useEffect(() => {
-    !isMicOn && onMic();
     handleScrollToBottom();
+    !isMicOn && onMic();
     text && !isMicOn && sendData();
   }, [isMicOn]);
   return (
     <div
-      className="fixed bottom-0  flex
-     w-1/2 min-w-80  bg-black "
+      className="  flex
+     w-1/2 min-w-80  bg-black fixed bottom-0"
     >
       <form onSubmit={onSubmit} className="  h-8 w-full relative">
         <textarea
           value={text}
-          // onChange={(e) => setText(e.target.value)}
+          placeholder="Speak to translate"
           onChange={(e) => setText(e.target.value)}
           required
           className="w-full bg-white h-full text-black px-2 resize-none"
@@ -129,7 +131,7 @@ export function Input(props: Props) {
         </button>
       </form>
       <div>
-        <p onClick={onMicClick} className="cursor-pointer absolute">
+        <p onClick={onMicClick} className="cursor-pointer absolute -left-10">
           <FontAwesomeIcon icon={isMicOn ? faMicrophone : faMicrophoneSlash} />
         </p>
       </div>
