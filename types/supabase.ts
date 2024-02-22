@@ -34,23 +34,26 @@ export type Database = {
   }
   public: {
     Tables: {
-      chennels: {
+      channels: {
         Row: {
           channel_name: string | null
           created_at: string
           id: number
+          updated_at: string | null
           userId: number | null
         }
         Insert: {
           channel_name?: string | null
           created_at?: string
           id?: number
+          updated_at?: string | null
           userId?: number | null
         }
         Update: {
           channel_name?: string | null
           created_at?: string
           id?: number
+          updated_at?: string | null
           userId?: number | null
         }
         Relationships: [
@@ -93,7 +96,7 @@ export type Database = {
             foreignKeyName: "public_Message_channelId_fkey"
             columns: ["channelId"]
             isOneToOne: false
-            referencedRelation: "chennels"
+            referencedRelation: "channels"
             referencedColumns: ["id"]
           },
           {

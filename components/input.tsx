@@ -36,7 +36,7 @@ export function Input(props: Props) {
     event.preventDefault();
     sendData();
   };
-  const sendData = async (mic?: SpeechRecognition) => {
+  const sendData = async () => {
     setText("");
     await addDataUI({
       input: text,
@@ -89,15 +89,6 @@ export function Input(props: Props) {
     };
     setIsMicOn(true);
     mic.start();
-
-    // mic.onspeechstart = () => {
-    //   console.log("Speech has been detected");
-    // };
-
-    // mic.onresult = (event) => {
-    //   const color = event.results[0][0];
-    //   console.log(color);
-    // };
 
     mic.onspeechend = async () => {
       setIsMicOn(false);
