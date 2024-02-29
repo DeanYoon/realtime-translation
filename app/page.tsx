@@ -3,9 +3,6 @@ import { Input } from "@/components/input";
 import Nav from "@/components/navigator";
 import TextCard from "@/components/text-card";
 import { useDBStore } from "@/lib/store";
-import { supabase } from "@/lib/supabase-client";
-import { Message } from "@/types/collection";
-import axios from "axios";
 import { RefObject, useEffect, useRef, useState } from "react";
 
 export interface IMessage {

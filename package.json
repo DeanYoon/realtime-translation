@@ -13,6 +13,8 @@
     "@fortawesome/fontawesome-svg-core": "^6.5.1",
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@radix-ui/react-popover": "1.0.7",
+    "@radix-ui/react-switch": "^1.0.3",
     "@supabase/supabase-js": "^2.39.6",
     "@types/react-speech-recognition": "^3.9.5",
     "axios": "^1.6.7",
@@ -22,7 +24,9 @@
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.50.1",
+    "react-select": "^5.8.0",
     "react-speech-recognition": "^3.10.0",
+    "react-toggle-button": "^2.2.0",
     "regenerator-runtime": "^0.14.1",
     "supabase": "^1.145.4",
     "zustand": "^4.5.1"

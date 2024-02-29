@@ -1,18 +1,17 @@
 "use client";
 
+import { language } from "@/lib/language";
 import { useDBStore } from "@/lib/store";
 import { supabase } from "@/lib/supabase-client";
 import {
   faMicrophone,
-  faMicrophoneAlt,
   faMicrophoneSlash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import axios from "axios";
-// import { translateText } from "@/lib/translate-text";
+
 import { FormEvent, RefObject, useEffect, useState } from "react";
-import { useSpeechRecognition } from "react-speech-recognition";
 
 interface Props {
   scrollRef: RefObject<HTMLDivElement>;
@@ -22,20 +21,17 @@ interface Props {
 export function Input(props: Props) {
   const currentChannelId = useDBStore((state) => state.channel);
   const userId = useDBStore((state) => state.user);
-
-  const [text, setText] = useState("");
   const fetchMessages = useDBStore((state) => state.fetchMessages);
   const addDataUI = useDBStore((state) => state.addDataUI);
+
+  const [inputLang, setInputLang] = useState(language.JP);
+  const [outputLang, setOutputLang] = useState(language.KR);
+  const [text, setText] = useState("");
   const [isMicOn, setIsMicOn] = useState(false);
+  const [isInputJP, setIsInputJP] = useState(false);
+
   const { handleScrollToBottom } = props;
 
-  let SpeechRecognition;
-  let mic: SpeechRecognition;
-
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    sendData();
-  };
   const sendData = async () => {
     setText("");
     await addDataUI({
@@ -49,6 +45,7 @@ export function Input(props: Props) {
       "api/translate",
       JSON.stringify({
         text: [text],
+        lang: outputLang,
       })
     );
 
@@ -71,13 +68,12 @@ export function Input(props: Props) {
   };
 
   const onMic = () => {
-    SpeechRecognition =
+    const SpeechRecognition =
       window.SpeechRecognition || window.webkitSpeechRecognition;
 
-    mic = new SpeechRecognition();
-    // mic.continuous = true;
+    const mic = new SpeechRecognition();
     mic.interimResults = true;
-    mic.lang = "ja-JP";
+    mic.lang = inputLang;
 
     mic.onresult = (event) => {
       const transcript = Array.from(event.results)
@@ -103,12 +99,30 @@ export function Input(props: Props) {
     handleScrollToBottom();
     !isMicOn && onMic();
     text && !isMicOn && sendData();
-  }, [isMicOn]);
+  }, [isMicOn, inputLang, outputLang]);
+
+  const handleToggle = () => {
+    setIsInputJP(!isInputJP);
+  };
+
+  useEffect(() => {
+    setInputLang(isInputJP ? language.JP : language.KR);
+    setOutputLang(isInputJP ? language.KR : language.JP);
+  }, [isInputJP]);
+
+  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    sendData();
+  };
   return (
     <div
       className="  flex
      w-1/2 min-w-80  bg-black fixed bottom-0"
     >
+      <p onClick={onMicClick} className="cursor-pointer absolute -left-10">
+        <FontAwesomeIcon icon={isMicOn ? faMicrophone : faMicrophoneSlash} />
+      </p>
+
       <form onSubmit={onSubmit} className="  h-8 w-full relative">
         <textarea
           value={text}
@@ -121,10 +135,16 @@ export function Input(props: Props) {
           Send
         </button>
       </form>
-      <div>
-        <p onClick={onMicClick} className="cursor-pointer absolute -left-10">
-          <FontAwesomeIcon icon={isMicOn ? faMicrophone : faMicrophoneSlash} />
-        </p>
+
+      <div className="fixed right-10 top-10">
+        <div className="flex items-center">
+          <button
+            onClick={handleToggle}
+            className={`border text-white font-bold py-2 px-4 rounded focus:outline-none`}
+          >
+            {isInputJP ? "JP→KR" : "KR→JP"}
+          </button>
+        </div>
       </div>
     </div>
   );

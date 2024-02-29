@@ -6,8 +6,8 @@ const translator = new deepl.Translator(authKey);
 
 export async function POST(request: Request) {
   const data = await request.json();
-  const { text } = data;
-  const result = await translator.translateText(text, null, "ko");
+  const { text, lang } = data;
+  const result = await translator.translateText(text, null, lang.slice(0, 2));
 
   return NextResponse.json(result);
 }
