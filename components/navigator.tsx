@@ -20,7 +20,6 @@ export default function Nav() {
 
   const inputRef = useRef<HTMLInputElement>(null);
   const { register, handleSubmit } = useForm();
-  const { ref } = register("");
 
   const onSubmit = async (data: any) => {
     const { newChannelName } = data;

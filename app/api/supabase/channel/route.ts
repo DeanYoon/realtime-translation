@@ -54,3 +54,32 @@ export async function POST(request: Request) {
     console.error(error);
   }
 }
+
+export async function DELETE(request: Request) {
+  try {
+    const data = await request.json();
+    const { channelId } = data;
+
+    // Check if the channelId is valid
+    if (!channelId) {
+      throw new Error("ChannelId is missing");
+    }
+
+    // Perform the delete operation
+    const { error } = await supabase
+      .from("channels")
+      .delete()
+      .eq("id", channelId);
+
+    if (error) {
+      console.error("Error deleting channel:", error);
+      return new Response(error.message, { status: 500 });
+    } else {
+      return new Response("Channel deleted successfully", { status: 200 });
+    }
+  } catch (error) {
+    console.error(error);
+    // return new Response(error.message, { status: 500 });
+    return new Response();
+  }
+}

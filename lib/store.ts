@@ -13,6 +13,7 @@ interface DBStore {
   addChannel: (newChannel: string) => Promise<void>;
   setChannel: (channelId: number) => Promise<void>;
   getChannels: () => Promise<void>;
+  deleteChannel: () => Promise<void>;
 }
 
 export const useDBStore = create<DBStore>((set, get) => ({
@@ -60,6 +61,24 @@ export const useDBStore = create<DBStore>((set, get) => ({
       // Set the default channel to the most recent channelId
       const mostRecentChannelId = data.length > 0 ? data[0].id : 1;
       set((state) => ({ channel: mostRecentChannelId }));
+    } catch (error) {
+      console.error("Error refreshing channels:", error);
+    }
+  },
+  deleteChannel: async () => {
+    const channelId = get().channel;
+    const requestData = {
+      channelId: channelId,
+    };
+
+    try {
+      const response = await axios.delete(`api/supabase/channel`, {
+        data: requestData,
+      });
+      const { data } = response.data;
+
+      const getChannels = get().getChannels;
+      await getChannels();
     } catch (error) {
       console.error("Error refreshing channels:", error);
     }

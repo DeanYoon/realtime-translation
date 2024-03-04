@@ -1,5 +1,4 @@
 import { IMessage } from "@/app/page";
-import { Message } from "@/types/collection";
 
 const TextCard = ({ message }: { message: IMessage }) => {
   return (

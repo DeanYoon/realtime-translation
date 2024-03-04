@@ -1,4 +1,5 @@
 "use client";
+import DeleteChannel from "@/components/delete-channel";
 import { Input } from "@/components/input";
 import Nav from "@/components/navigator";
 import TextCard from "@/components/text-card";
@@ -30,8 +31,9 @@ export default function Home() {
   return (
     <div className="flex  w-screen  h-screen">
       <Nav />
+      <DeleteChannel />
       <div
-        className="flex flex-col w-full items-center justify-center overflow-scroll "
+        className="flex  w-full items-center justify-center overflow-scroll relative "
         ref={scrollRef}
       >
         <div className=" pb-8 h-full  w-1/3   min-w-80 ">
